@@ -1,0 +1,58 @@
+body {
+    /*background:#555;*/
+   color:#aaa;
+   color:#c4a229;   
+}
+
+.table th, .table td {
+    text-align:center;
+    vertical-align:middle;
+    color:#ad8d24;
+    color:#999;
+}
+
+.table th {
+    color:#EAC22F; 
+    color:#c4a229; 
+}
+
+#example_filter .dataTables_filter {
+    display:none;
+}
+
+textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+    background-color:#333;
+    border: 1px solid #000;
+}
+
+.btn-inverse {
+    color:#C4A229;
+}
+
+.btn-inverse:hover, .btn-inverse:active, .btn-inverse.active, .btn-inverse.disabled, .btn-inverse[disabled] {
+    color:#fff;
+}
+
+.message-cancel {
+	font-weight:bold;
+}
+ul.nav-scroll {
+	list-style-type: none;
+	right: 0;
+	top: 59px;
+	position: fixed;
+	height: 100%;
+	background-color: #333;
+	padding: 0 5px; 
+}
+ul.nav-scroll>li {
+	height: 3.84615384615%;
+	height: 2%;
+	min-height: 20px;
+	min-height: 19px;
+	display: block;
+}
+
+#example_wrapper {
+	margin: 0 10px 0 -5px;
+}
