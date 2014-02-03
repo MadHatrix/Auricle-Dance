@@ -1,43 +1,28 @@
-<? //session_start();
+<?php //session_start();
 	include('app/functions.php');
 	
-  userControl();
+	userControl();
 	
-	if($_GET && $_GET['clearMessage'] == 1) {
-		$_SESSION['message'] = "";
-		$sendToPage = "index.php";
-		sendToPage($sendToPage);
-	}
-	
-   
-	//if(isset($_SESSION['EmailAddress']) && $_SESSION['EmailAddress'] != ""){
-	if($_GET && $_GET['request'] != "") {
-		$requestID = $_GET['request'];	
-		addUserRequest($requestID);
-		//$sendToPage = "index.php?messageAdded=1&id=$requestID";
-		//sendToPage($sendToPage);
-	}
-	//} else {
-		///...
-	//}
-	if($_GET['added']) {
-		$songID = $_GET['added'];
-		$songNameArtist = getSongNameArtistByID($songID);
-		$userEmail = $_SESSION['EmailAddress'];
-		$userID = getUserIDFromEmail($userEmail);
-		//$sendToPage="index.php";
-		//sendToPage($sendToPage);
-		// if(limitUserRequests($userID) >= 5){      			
-			// $message = "<div class='alert alert-error'>We currently only take 10 song requests per user per night.</div>";  				
-		// } else {
-			// $message = "<div class='alert alert-success'>The Song : $songNameArtist has been added to the request Queue.</div>";
-		// }
-	}
-	if($_GET['remove']) {					
-		$removeID = $_GET['remove'];
-		removeUserRequest($removeID);
-		//$songNameArtist = getSongNameArtistByID($removeID);
-		//$message = "<div class='alert'>$songNameArtist has been removed from your requests.</div>";
+	if($_GET) {
+		if ($_GET['clearMessage'] == 1) {
+			$_SESSION['message'] = "";
+			$sendToPage = "index.php";
+			sendToPage($sendToPage);
+		}
+		if ($_GET['request'] != "") {
+			$requestID = $_GET['request'];	
+			addUserRequest($requestID);
+		}
+		if($_GET['added']) {
+			$songID = $_GET['added'];
+			$songNameArtist = getSongNameArtistByID($songID);
+			$userEmail = $_SESSION['EmailAddress'];
+			$userID = getUserIDFromEmail($userEmail);
+		}
+		if($_GET['remove']) {					
+			$removeID = $_GET['remove'];
+			removeUserRequest($removeID);
+		}
 	}
 ?>
 	
@@ -54,12 +39,6 @@
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/darkstrap.css" rel="stylesheet">
     
-    <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-      
-    </style>
     <link href="assets/css/bootstrap-responsive.min.css" rel="stylesheet">
     <link href="assets/css/styles.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="assets/css/data-table-bootstrap.css">
@@ -89,7 +68,7 @@
 
   <body>
   	
-	  <? if( 1!=1 /*
+	  <?php if( 1!=1 /*
   			$_SERVER['REMOTE_ADDR'] != "69.84.42.130" && //AMCH
   			$_SERVER['REMOTE_ADDR'] != "108.75.121.195" && //Chris Home
 				$_SERVER['REMOTE_ADDR'] != "63.149.72.62" && //Auricle
@@ -108,36 +87,11 @@
 					</p>
 				</div><!-- container -->
   	
-  	<? } else { ?>
-  	
-	<ul class="nav-scroll">
-		<li><a href="#a">A</a></li>
-		<li><a href="#b">B</a></li>
-		<li><a href="#c">C</a></li>
-		<li><a href="#d">D</a></li>
-		<li><a href="#e">E</a></li>
-		<li><a href="#f">F</a></li>
-		<li><a href="#g">G</a></li>
-		<li><a href="#h">H</a></li>
-		<li><a href="#i">I</a></li>
-		<li><a href="#j">J</a></li>
-		<li><a href="#k">K</a></li>
-		<li><a href="#l">L</a></li>
-		<li><a href="#m">M</a></li>
-		<li><a href="#n">N</a></li>
-		<li><a href="#o">O</a></li>
-		<li><a href="#p">P</a></li>
-		<li><a href="#q">Q</a></li>
-		<li><a href="#r">R</a></li>
-		<li><a href="#s">S</a></li>
-		<li><a href="#t">T</a></li>
-		<li><a href="#u">U</a></li>
-		<li><a href="#v">V</a></li>
-		<li><a href="#w">W</a></li>
-		<li><a href="#x">X</a></li>
-		<li><a href="#y">Y</a></li>
-		<li><a href="#z">Z</a></li>		
-	</ul>
+  	<?php } else { ?>
+	  	
+	<!--<ul class="nav-scroll"> 
+		<li><a href="#a">A</a></li> <li><a href="#b">B</a></li> <li><a href="#c">C</a></li> <li><a href="#d">D</a></li> <li><a href="#e">E</a></li> <li><a href="#f">F</a></li> <li><a href="#g">G</a></li> <li><a href="#h">H</a></li> <li><a href="#i">I</a></li> <li><a href="#j">J</a></li> <li><a href="#k">K</a></li> <li><a href="#l">L</a></li> <li><a href="#m">M</a></li> <li><a href="#n">N</a></li> <li><a href="#o">O</a></li> <li><a href="#p">P</a></li> <li><a href="#q">Q</a></li> <li><a href="#r">R</a></li> <li><a href="#s">S</a></li> <li><a href="#t">T</a></li> <li><a href="#u">U</a></li> <li><a href="#v">V</a></li> <li><a href="#w">W</a></li> <li><a href="#x">X</a></li> <li><a href="#y">Y</a></li> <li><a href="#z">Z</a></li>		
+	</ul>-->
 	
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
@@ -160,37 +114,27 @@
     </div>		
     <div class="container">
     	
-    	<?=printTestingVars();?>
-    	<!--SEARCH BOX-->
-    	<!-- search box padding here-->
-    	<!-- moved inside datatables js -->    	
-    	<!-- <div class="input-prepend">
-    		<span class="add-on" style="padding:1em;"><i class="icon-search"></i></span>
-    		<input id="search-box"  type="text" placeholder="Song Request Search" style="width:80%; padding:1em 0.5em;">
-    	</div>
-    	<button class="btn btn-inverse">RECOMMEND</button> A SONG NOT LISTED<br><br>
-    	 -->
-    	
-    	 <? 
-    	 	if($message) {
+    	<?php 
+    		echo printTestingVars();
+    	 
+    	 	if(isset($message)) {
     	 		echo $message;
-    	 	}
-				if($_SESSION['message']) {
-					echo $_SESSION['message'];
-				}
-    	 ?>
-    	 <? $sessionID = $_SESSION['SessionID']; 
-    	 		$userID = getUserIDFromSessionID($sessionID);
-    	 		$requestsLeft = 5 - limitUserRequests($userID);
-					echo "<div style='float:left; margin-top:-15px; margin-bottom:5px; font-size:11px;'><span class='label label-info'>". $requestsLeft . "</span> Requests Available. Will Refill as your songs play.</div>";
+    	 	} elseif (isset($_SESSION['message'])) {
+				echo $_SESSION['message'];
+			}
+    	 
+    	 	$sessionID = $_SESSION['SessionID']; 
+	 		$userID = getUserIDFromSessionID($sessionID);
+	 		$requestsLeft = 5 - limitUserRequests($userID);
+				echo "<div style='float:left; margin-top:-15px; margin-bottom:5px; font-size:11px;'><span class='label label-info'>". $requestsLeft . "</span> Requests Available. Will Refill as your songs play.</div>";
     	 ?>
     	<table class="table table-bordered  table-condensed table-striped" id="example" style="font-weight: 10px;">
     		<thead>
-    			<? if ( $mobile == 1 ) { ?>
+    			<?php if (isset($mobile) && $mobile == 1 ) { ?>
     				<tr><th>Artist/Song</th>
-    			<? } else { ?>
+    			<?php } else { ?>
     				<tr><th>Artist</th><th>Song</th>
-    			<? } ?>
+    			<?php } ?>
     				<th>Request</th></tr>
     		</thead>
     		<tbody>
@@ -211,7 +155,8 @@
 							$iconSign = "plus";
 							$option = "request";
 							$userSongRequest = 0;
-							$userSongRequest = userSongRequested($songID);
+							//$userSongRequest = userSongRequested($songID);
+							$userSongRequest = 1;
 							if ($userSongRequest == 1){
 								$buttonClass = "btn-danger'";
 								$iconSign = "minus";
@@ -283,9 +228,9 @@
 									$option = "request";
 								}
 								 
-							
+							$trClass='';
 							$displayHTML .= "<tr $trClass>";
-								if ($mobile == 1) {
+								if (isset($mobile) && $mobile == 1) {
 									$displayHTML .= "<td>".$songArtist."<br>"; //."</td>";
 									$displayHTML .= $songName."<br>".$statusInfo."</td>";
 								} else {
@@ -307,10 +252,11 @@
 								$displayHTML .= "</td>";
 								 
 							$displayHTML .= "</tr>";
-							 if (strtolower(substr($songArtist, 0, 1)) != strtolower($firstLetter)) {
+							
+							/*if (strtolower(substr($songArtist, 0, 1)) != strtolower($firstLetter)) {
 									$firstLetter = strtolower(substr($songArtist, 0, 1));
 									$displayHTML .= "<tr id='{$firstLetter}'><td><div id=\"{$firstLetter}\">" . strtoupper($firstLetter) . "</span></td><td></td></tr>";
-							}
+							}*/
 												
 						 } // return all songs
 						 echo $displayHTML;
@@ -323,29 +269,28 @@
     			
     		</tbody>
     	</table>
-		<? //echo $_SERVER['REMOTE_ADDR']; ?>
+		<?php //echo $_SERVER['REMOTE_ADDR']; ?>
     </div> <!-- /container -->
 	
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <!-- <script src="assets/js/jquery.js"></script> -->
-    <!-- <script src="assets/js/bootstrap-transition.js"></script> -->
-    <!--<script src="assets/js/bootstrap-alert.js"></script>
-    <script src="assets/js/bootstrap-modal.js"></script>
-    <script src="assets/js/bootstrap-dropdown.js"></script>
-    <script src="assets/js/bootstrap-scrollspy.js"></script>
-    <script src="assets/js/bootstrap-tab.js"></script>
-    <script src="assets/js/bootstrap-tooltip.js"></script>
-    <script src="assets/js/bootstrap-popover.js"></script>
-    <script src="assets/js/bootstrap-button.js"></script>-->    
-	<script src="assets/js/bootstrap-collapse.js"></script>
-    <!--<script src="assets/js/bootstrap-carousel.js"></script>
-    <script src="assets/js/bootstrap-typeahead.js"></script>-->
-	<script src="assets/js/site.js"></script>
+	    <!-- Le javascript
+	    ================================================== -->
+	    <!-- Placed at the end of the document so the pages load faster -->
+	    <!-- <script src="assets/js/jquery.js"></script> -->
+	    <!-- <script src="assets/js/bootstrap-transition.js"></script> -->
+	    <!--<script src="assets/js/bootstrap-alert.js"></script>
+	    <script src="assets/js/bootstrap-modal.js"></script>
+	    <script src="assets/js/bootstrap-dropdown.js"></script>
+	    <script src="assets/js/bootstrap-scrollspy.js"></script>
+	    <script src="assets/js/bootstrap-tab.js"></script>
+	    <script src="assets/js/bootstrap-tooltip.js"></script>
+	    <script src="assets/js/bootstrap-popover.js"></script>
+	    <script src="assets/js/bootstrap-button.js"></script>-->    
+		<script src="assets/js/bootstrap-collapse.js"></script>
+	    <!--<script src="assets/js/bootstrap-carousel.js"></script>
+	    <script src="assets/js/bootstrap-typeahead.js"></script>-->
+		<script src="assets/js/site.js"></script>
 
-		<? } // IP check ?>
+<?php } // IP check ?>
 		
-
   </body>
 </html>

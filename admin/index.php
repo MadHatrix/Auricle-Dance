@@ -1,4 +1,4 @@
-<? session_start(); 
+<?php //session_start(); 
 include('../app/functions.php'); 
 //$_SESSION['admin'] = 0;
 
@@ -16,7 +16,7 @@ if($_POST) {
 		} // if password and username match
 	}
 }
-if($_GET['logout'] == 1) {
+if(isset($_GET['logout']) && $_GET['logout'] == 1) {
 	$_SESSION = "";
 	$_SESSION['admin'] = 0;
 	$displayLoginBox = 1;
@@ -30,12 +30,12 @@ if($_GET && $_GET['action']) {
 }
 
 	//$vars="";
-  //=userControl($vars);
-  if($_GET && $_GET['request'] != "") {
+	//=userControl($vars);
+  	if($_GET && $_GET['request'] != "") {
 		$requestID = $_GET['request'];	
 		addUserRequest($requestID);
   	}
-	if ($_GET['action']) {
+	if (isset($_GET['action']) && $_GET['action']) {
 		$action = $_GET['action'];
 		$songID = $_GET['id'];
 		// added to q	
@@ -65,15 +65,9 @@ if($_GET && $_GET['action']) {
     <link href="../assets/css/bootstrap.css" rel="stylesheet">
     <link href="../assets/css/darkstrap.css" rel="stylesheet">
     
-    <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-    </style>
     <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
     <link href="../assets/css/styles.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../assets/css/data-table-bootstrap.css">
-    
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -96,7 +90,7 @@ if($_GET && $_GET['action']) {
   </head>
 
   <body>
-  	<? if( 1==1
+  	<?php if( 1==1
   			//$_SERVER['REMOTE_ADDR'] == "69.84.42.130" || //AMCH
   			//$_SERVER['REMOTE_ADDR'] == "108.75.121.195" || //Chris Home
 				//$_SERVER['REMOTE_ADDR'] == "63.149.72.62" || //Auricle
@@ -114,34 +108,34 @@ if($_GET && $_GET['action']) {
           <div class="nav-collapse collapse">
             <ul class="nav">
               <li class="active"><a href="index.php">Admin</a></li>
-              <? if($displayLoginBox == 0) { ?> 
-              <li><a href="add.php">Add Songs To Queue</a></li>
-              <li><a href="view-recommended.php">View Recommended Songs</a></li>
-			  <li><a href="update-song-list.php">Update Song List</a></li>
-              <li><a href="index.php?logout=1">Log Out</a></li>
-              <? } else { ?>
+              <?php if($displayLoginBox == 0) { ?> 
+	              <li><a href="add.php">Add Songs To Queue</a></li>
+	              <li><a href="view-recommended.php">View Recommended Songs</a></li>
+				  <li><a href="update-song-list.php">Update Song List</a></li>
+	              <li><a href="index.php?logout=1">Log Out</a></li>
+              <?php } else { ?>
               <li><a href="#myModal"  data-toggle="modal">Login</a></li>
-              <? } // login box = 0 ?>
+              <?php } // login box = 0 ?>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
       </div>
     </div>		
     <div class="container">
-			<? //echo uniqid(php_uname('n'), true); ?>
-
-    	<?//=printTestingVars();?>
-    	<!--SEARCH BOX-->
-    	<!-- search box padding here-->
-    	<!-- moved inside datatables js -->    	
-    	<!-- <div class="input-prepend">
-    		<span class="add-on" style="padding:1em;"><i class="icon-search"></i></span>
-    		<input id="search-box"  type="text" placeholder="Song Request Search" style="width:80%; padding:1em 0.5em;">
-    	</div>
-    	<button class="btn btn-inverse">RECOMMEND</button> A SONG NOT LISTED<br><br>
-    	 -->
+		<?php 
+			//echo uniqid(php_uname('n'), true); 
+			//=printTestingVars();?>
+	    	<!--SEARCH BOX-->
+	    	<!-- search box padding here-->
+	    	<!-- moved inside datatables js -->    	
+	    	<!-- <div class="input-prepend">
+	    		<span class="add-on" style="padding:1em;"><i class="icon-search"></i></span>
+	    		<input id="search-box"  type="text" placeholder="Song Request Search" style="width:80%; padding:1em 0.5em;">
+	    	</div>
+	    	<button class="btn btn-inverse">RECOMMEND</button> A SONG NOT LISTED<br><br>
+	    	 -->
     	<div style="float:right;">
-    		<? if($displayLoginBox == 0) { ?> 
+    		<?php if($displayLoginBox == 0) { ?> 
 	    		Status Key: 
 	    		<i class="icon-comment icon-white"></i> Requested
 	    		<i class="icon-plus-sign icon-white"></i> In Queue
@@ -150,82 +144,80 @@ if($_GET && $_GET['action']) {
 	    		<i class="icon-question-sign icon-white"></i> Maybe
 	    		<i class="icon-eject icon-white"></i> Not Tonight
 	    		<i class="icon-ban-circle icon-white"></i> Removed
-    		<? } //if Login Box = 0 ?>
+    		<?php } //if Login Box = 0 ?>
     	</div><!-- float right-->
   
-    	<? if($displayLoginBox == 0) { ?> 
+    	<?php if($displayLoginBox == 0) { ?> 
     	<table class="table table-bordered  table-condensed table-striped" id="adminTable" style="font-weight: 10px;">
     		<thead>
     			<tr><th>Requested</th><th>Song</th><th>User</th><th>Status/Actions</th></tr>
     		</thead>
     		<tbody>
-    			<? $displayHTML = "";
+    			<?php $displayHTML = "";
 					$negativeFourHours = subtractFourHours();
-    				 $sql = "SELECT requests.id, requests.song_id, requests.user_id, requests.status, requests.date_requested,
-	    				 								songs.SongArtist, songs.SongName, 
-	    				 								users.email, users.first, users.last
-    				 								FROM requests, songs, users 
-    				 								WHERE requests.song_id = songs.ID AND requests.user_id = users.id
-    				 								/* AND requests.date_requested > '$negativeFourHours' */
-    				 								AND requests.status != 7 AND requests.status != 0
-    				 								ORDER BY requests.status ASC";
-						 $result = mysql_query($sql) or die(mysql_error());
-						 while ($row = mysql_fetch_array($result)) {
-						 	$ID = $row['id'];	
-						 	$songID = $row['song_id'];
-						 	$songName = $row['SongName'];
-							$songArtist = $row['SongArtist'];
-						 	$userID = $row['user_id'];
-							$userFName = $row['first'];
-							$userLName = $row['last'];
-							$status = $row['status'];
-						 	$dateRequested = $row['date_requested'];
-						 	//$dateAdded = $row['DateAdded'];
-							// check if user already requested song
-							// if yes, prevent song request
-							// 1 - requested
-							//echo $status;
-							if($status == 1){ $status = "<span class='badge badge-info' title='Requested'><i class='icon-comment icon-white'></i></span>"; }
-							// 2 - in q 
-							if($status == 2){ $status = "<span class='badge badge-warning' title='In Q'><i class='icon-plus-sign icon-white'></i></span>"; }
-							// 3 - maybe
-							if($status == 3){ $status = "<span class='badge badge-inverse' title='Maybe'><i class='icon-question-sign icon-white'></i></span>"; }
-							// 4 - play
-							if($status == 4){ $status = "<span class='badge badge-success' title='Played'><i class='icon-play icon-white'></i></span>"; }
-							// 5 - played earlier
-							//if($status == 5){ $status = "<span class='badge badge-success'><i class='icon-refresh icon-white'></i></span>"; }							
-							// 6 - not tonight
-							if($status == 6){ $status = "<span class='badge badge-important' title='Not Tonight'><i class='icon-eject icon-white'></i></span>"; }
-							// 7 - no
-							if($status == 7){ $status = "<span class='badge badge-important' title='No'><i class='icon-ban-circle icon-white'></i></span>"; }
+    				$sql = "SELECT requests.id, requests.song_id, requests.user_id, requests.status, requests.date_requested,
+	 								songs.SongArtist, songs.SongName, 
+	 								users.email, users.first, users.last
+								FROM requests, songs, users 
+								WHERE requests.song_id = songs.ID AND requests.user_id = users.id
+								/* AND requests.date_requested > '$negativeFourHours' */
+								AND requests.status != 7 AND requests.status != 0
+ 								ORDER BY requests.status ASC";
+					 $result = mysql_query($sql) or die(mysql_error());
+					 while ($row = mysql_fetch_array($result)) {
+					 	$ID = $row['id'];	
+					 	$songID = $row['song_id'];
+					 	$songName = $row['SongName'];
+						$songArtist = $row['SongArtist'];
+					 	$userID = $row['user_id'];
+						$userFName = $row['first'];
+						$userLName = $row['last'];
+						$status = $row['status'];
+					 	$dateRequested = $row['date_requested'];
+					 	//$dateAdded = $row['DateAdded'];
+						// check if user already requested song
+						// if yes, prevent song request
+						// 1 - requested
+						//echo $status;
+						if($status == 1){ $status = "<span class='badge badge-info' title='Requested'><i class='icon-comment icon-white'></i></span>"; }
+						// 2 - in q 
+						if($status == 2){ $status = "<span class='badge badge-warning' title='In Q'><i class='icon-plus-sign icon-white'></i></span>"; }
+						// 3 - maybe
+						if($status == 3){ $status = "<span class='badge badge-inverse' title='Maybe'><i class='icon-question-sign icon-white'></i></span>"; }
+						// 4 - play
+						if($status == 4){ $status = "<span class='badge badge-success' title='Played'><i class='icon-play icon-white'></i></span>"; }
+						// 5 - played earlier
+						//if($status == 5){ $status = "<span class='badge badge-success'><i class='icon-refresh icon-white'></i></span>"; }							
+						// 6 - not tonight
+						if($status == 6){ $status = "<span class='badge badge-important' title='Not Tonight'><i class='icon-eject icon-white'></i></span>"; }
+						// 7 - no
+						if($status == 7){ $status = "<span class='badge badge-important' title='No'><i class='icon-ban-circle icon-white'></i></span>"; }
 							
 							
-							$requestActions = "
-			    			<a href='?action=2&amp;id=$ID' title='Put in Queue'><button class='btn btn-inverse'><i class='icon-plus-sign icon-white'></i></button></a>
-			    			<a href='?action=3&amp;id=$ID' title='Maybe'><button class='btn btn-inverse'><i class='icon-question-sign icon-white'></i></button></a>
-			    			<a href='?action=4&amp;id=$ID' title='Played Selection'><button class='btn btn-inverse'><i class='icon-play icon-white'></i></button></a>			    						    			
-			    			<a href='?action=6&amp;id=$ID' title='Not Tonight'><button class='btn btn-inverse'><i class='icon-eject icon-white'></i></button></a>
-			    			<a href='?action=7&amp;id=$ID' title='Remove From Q'><button class='btn btn-inverse'><i class='icon-ban-circle icon-white'></i></button></a>";
-								/*<a href='?action=5&amp;id=$ID' title='Previously Played'><button class='btn btn-inverse'><i class='icon-refresh icon-white'></i></button></a>*/
-			    			
-							 
-							 
-							 $displayHTML .= "<tr>";
-							 $displayHTML .= "<td>".$dateRequested."</td><td>".$songArtist." - ".$songName."</td><td>".$userID."</td><td><span style='display:none;'>".$row['status']."</span>".$status." | ".$requestActions."</td>";
-							 $displayHTML .= "</tr>";
-							 
-						 } // return all songs
+						$requestActions = "
+		    			<a href='?action=2&amp;id=$ID' title='Put in Queue'><button class='btn btn-inverse'><i class='icon-plus-sign icon-white'></i></button></a>
+		    			<a href='?action=3&amp;id=$ID' title='Maybe'><button class='btn btn-inverse'><i class='icon-question-sign icon-white'></i></button></a>
+		    			<a href='?action=4&amp;id=$ID' title='Played Selection'><button class='btn btn-inverse'><i class='icon-play icon-white'></i></button></a>			    						    			
+		    			<a href='?action=6&amp;id=$ID' title='Not Tonight'><button class='btn btn-inverse'><i class='icon-eject icon-white'></i></button></a>
+		    			<a href='?action=7&amp;id=$ID' title='Remove From Q'><button class='btn btn-inverse'><i class='icon-ban-circle icon-white'></i></button></a>";
+							/*<a href='?action=5&amp;id=$ID' title='Previously Played'><button class='btn btn-inverse'><i class='icon-refresh icon-white'></i></button></a>*/
+		    			
+						 $displayHTML .= "<tr>";
+						 $displayHTML .= "<td>".$dateRequested."</td><td>".$songArtist." - ".$songName."</td><td>".$userID."</td><td><span style='display:none;'>".$row['status']."</span>".$status." | ".$requestActions."</td>";
+						 $displayHTML .= "</tr>";
+						 
+					 } // return all songs
 						 echo $displayHTML;
 					?>
-    			<!-- <tr>
-    				<td>thing</td>
-    				<td>thing</td>    				
-    				<td><i class="icon-arrow-up"></i></td>
-    			</tr> -->
+			<!-- <tr>
+				<td>thing</td>
+				<td>thing</td>    				
+				<td><i class="icon-arrow-up"></i></td>
+			</tr> -->
     			
     		</tbody>
     	</table>
-    	<? } // if Login Box = 0?>
+    	<?php } // if Login Box = 0?>
     </div> <!-- /container -->
 
     <!-- Le javascript
@@ -245,33 +237,33 @@ if($_GET && $_GET['action']) {
     <script src="../assets/js/bootstrap-carousel.js"></script>
     <script src="../assets/js/bootstrap-typeahead.js"></script>
     
-    <? if($displayLoginBox == 1) { ?>
-			<!-- Modal -->
-			<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			  <div class="modal-header">
-			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			    <h3 id="myModalLabel">Login</h3>
-			  </div>
-			  <div class="modal-body">
-			    <p>Hey Sucka! No peep shows here. Log in!</p>
-			    <form method="post" action="index.php" class="form-inline">
-			    	<input type="hidden" name="login" value="1">
-			    	<div class="inline">
-			    	<input type="text" name="username" placeholder="User Name">
-			    	<input type="password" name="password" placeholder="Password">
-			    	<button class="btn btn-primary">Log In</button>
-			    	</div>
-			    </form>
-			    
-			  </div>
-			  <div class="modal-footer">
-			    <!-- <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-			    <button class="btn btn-primary">Save changes</button> -->
-			  </div>
-			</div>
-			<script>$('#myModal').modal('show')</script>
-    <? } ?>
+    <?php if($displayLoginBox == 1) { ?>
+		<!-- Modal -->
+		<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-header">
+		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		    <h3 id="myModalLabel">Login</h3>
+		  </div>
+		  <div class="modal-body">
+		    <p>Hey Sucka! No peep shows here. Log in!</p>
+		    <form method="post" action="index.php" class="form-inline">
+		    	<input type="hidden" name="login" value="1">
+		    	<div class="inline">
+		    	<input type="text" name="username" placeholder="User Name">
+		    	<input type="password" name="password" placeholder="Password">
+		    	<button class="btn btn-primary">Log In</button>
+		    	</div>
+		    </form>
+		    
+		  </div>
+		  <div class="modal-footer">
+		    <!-- <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+		    <button class="btn btn-primary">Save changes</button> -->
+		  </div>
+		</div>
+		<script>$('#myModal').modal('show')</script>
+    <?php } ?>
     
-	<? } // IP Check?>
+	<?php } // IP Check?>
   </body>
 </html>

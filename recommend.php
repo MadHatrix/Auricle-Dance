@@ -1,37 +1,34 @@
-<? session_start(); 
-	include('app/functions.php'); 
-	//checkForUserSession();
-?>
-
-<?
+<?php //session_start(); 
+include('app/functions.php'); 
+//checkForUserSession();
 
 
-function insertRecommendedSong($artist, $song) {
-			$sql = "INSERT INTO recommended (artist, song) VALUES ('$artist', '$song')";
-			mysql_query($sql) or die(mysql_error());
-			
-			return 1;	
-		}
-
-if($_POST) {
-	if($_POST['request-form'] == 1) {
-		if (!empty($_POST['artist']) ) { $artist = $_POST['artist']; }
-		if (!empty($_POST['song']) ) { $song = $_POST['song']; }
+	function insertRecommendedSong($artist, $song) {
+		$sql = "INSERT INTO recommended (artist, song) VALUES ('$artist', '$song')";
+		mysql_query($sql) or die(mysql_error());
 		
-		if (!empty($artist) && !empty($song) ) {
-			if ( insertRecommendedSong($artist, $song) == 1 ) {
-				$notification = 1;
-				$notificationType = 'success';
-				$notificationMessage = "The song has been submitted for review.<br><a href='index.php'>View Song List</a>";	
-			}	
-		} else {
-			$notification = 1;
-			$notificationType = 'error';
-			$notificationMessage = "You need to fill out both Artist and Song Title";
-		}
-		
+		return 1;	
 	}
-} 
+
+	if($_POST) {
+		if($_POST['request-form'] == 1) {
+			if (!empty($_POST['artist']) ) { $artist = $_POST['artist']; }
+			if (!empty($_POST['song']) ) { $song = $_POST['song']; }
+			
+			if (!empty($artist) && !empty($song) ) {
+				if ( insertRecommendedSong($artist, $song) == 1 ) {
+					$notification = 1;
+					$notificationType = 'success';
+					$notificationMessage = "The song has been submitted for review.<br><a href='index.php'>View Song List</a>";	
+				}	
+			} else {
+				$notification = 1;
+				$notificationType = 'error';
+				$notificationMessage = "You need to fill out both Artist and Song Title";
+			}
+			
+		}
+	} 
 ?> 
 
 <!DOCTYPE html>
@@ -46,12 +43,7 @@ if($_POST) {
     <!-- Le styles -->
     <link href="assets/css/bootstrap.css" rel="stylesheet">
     <link href="assets/css/darkstrap.css" rel="stylesheet">
-    
-    <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-    </style>
+
     <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
     
     <link rel="stylesheet" type="text/css" href="assets/css/data-table-bootstrap.css">
@@ -73,7 +65,7 @@ if($_POST) {
 		<script type="text/javascript" charset="utf-8" language="javascript" src="assets/js/datatable/jquery.dataTables.js"></script>
 		<script type="text/javascript" charset="utf-8" language="javascript" src="assets/js/datatable/data.table.bootstrap.js"></script>
 		
-		<?
+		<?php
 			// THIS MIGHT NOT BE NEEDED....
 			/*
 			//DETECT DISPLAY RESOLUTION
@@ -100,7 +92,7 @@ if($_POST) {
 			}
 			*/
 			$mobile = 0;
-			?>
+		?>
 		
   </head>
 
@@ -124,15 +116,19 @@ if($_POST) {
         </div>
       </div>
     </div>
-		<? if ($notification == 1) {
-			echo "<div class='alert alert-$notificationType'>
-							<a href='index.php'><button type='button' class='close'>&times;</button></a>"
-						.$notificationMessage.
-						"</div>";
-		}?>
+		<?php 
+			if (isset($notification) && $notification == 1) {
+				echo "<div class='alert alert-$notificationType'>
+					<a href='index.php'><button type='button' class='close'>&times;</button></a>"
+					.$notificationMessage.
+					"</div>";
+			}
+		?>
     <div class="container">
-    	<?$vars=""; ?>
-    	<?=userControl($vars);?>
+    	<?php 
+    		echo $vars="";
+			echo userControl($vars); 
+		?>
 			<form method="post">
 				<input type="hidden" name="request-form" value="1">
 				
@@ -166,6 +162,6 @@ if($_POST) {
 
   </body>
 </html>
-<?
+<?php
 //echo printTestingVars();
 ?>
